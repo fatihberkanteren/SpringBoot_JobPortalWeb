@@ -5,8 +5,13 @@ import com.fatihberkant.jobportal.entity.UsersType;
 import com.fatihberkant.jobportal.repository.UsersRepository;
 import com.fatihberkant.jobportal.services.UsersService;
 import com.fatihberkant.jobportal.services.UsersTypeService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,13 +25,11 @@ public class UsersController {
 
     private final UsersTypeService usersTypeService;
     private final UsersService usersService;
-    private final UsersRepository usersRepository;
 
     @Autowired
     public UsersController(UsersTypeService usersTypeService, UsersService usersService, UsersRepository usersRepository) {
         this.usersTypeService = usersTypeService;
         this.usersService = usersService;
-        this.usersRepository = usersRepository;
     }
 
     @GetMapping("/register")
@@ -48,8 +51,22 @@ public class UsersController {
             return "register";
         }
         usersService.addNew(users);
-
         return "dashboard";
+    }
+
+    @GetMapping("/login")
+    public String login(){
+        return "login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null){
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        return "redirect:/";
     }
 
 }
