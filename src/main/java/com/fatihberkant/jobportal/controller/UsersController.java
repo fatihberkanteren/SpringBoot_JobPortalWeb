@@ -6,7 +6,6 @@ import com.fatihberkant.jobportal.repository.UsersRepository;
 import com.fatihberkant.jobportal.services.UsersService;
 import com.fatihberkant.jobportal.services.UsersTypeService;
 import jakarta.validation.Valid;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
